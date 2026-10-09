@@ -1,0 +1,206 @@
+# Steam Frame Setup – Spanish (Español)
+# Format: key=value  (printf placeholders: %s, line break: \n)
+
+lang_name=Español
+yes_words=s si sí y yes
+no_words=n no
+hint_yes=[S/n]
+hint_no=[s/N]
+pause=Pulsa [Intro] para continuar ...
+lang_keep=Opción [Intro = %s]:
+
+dry_nothing=Simulación: no se ha escrito nada.
+file_uptodate=%s ya está actualizado.
+changes_to=Cambios en %s:
+old=antes
+new=después
+file_written=%s escrito.
+install_manually=Distribución desconocida – instálalo manualmente: %s
+atomic_layer=Sistema atómico (Silverblue/Kinoite/Bazzite …): los paquetes se añaden con rpm-ostree, hace falta reiniciar.
+not_installed='%s' no está instalado.
+install_now=¿Instalar el paquete '%s' ahora?
+cancel=Cancelar
+choice=Opción:
+unknown=desconocido
+
+t_diag=Información del sistema / diagnóstico
+l_distro=Distribución:
+l_atomic=Sistema atómico / ostree
+l_kernel=Kernel:
+l_regdom=Dominio regulatorio Wi-Fi:
+iw_missing=(iw no instalado)
+l_backend=Backend de NetworkManager:
+backend_default=wpa_supplicant (predeterminado)
+l_iwd=Servicio iwd:
+l_powersave=Ahorro de energía %s:
+l_iwdconf=iwd main.conf:
+not_present=no existe
+l_firewall=Cortafuegos:
+fw_firewalld=firewalld activo (zona predeterminada: %s)
+fw_needsudo=estado solo con sudo
+fw_none=no encontrado (ufw/firewalld)
+l_audio=Servidor de audio:
+l_frame=Perfiles de Steam Frame:
+none_found=ninguno
+not_set=no configurado
+
+t_regdom=Dominio regulatorio Wi-Fi (código de país)
+regdom_current=Dominio regulatorio global actual: %s
+already_set=Ya está configurado.
+change_anyway=¿Cambiarlo de todos modos?
+regdom_00="00" = mundial/mínimo – los canales de 5 GHz para la Steam Frame están limitados.
+regdom_prompt=Código de país (ISO, p. ej. ES, MX, AR) [%s]:
+regdom_invalid=Introduce exactamente dos letras.
+regdom_apply=Aplicando ahora (hasta reiniciar; después se usa la configuración):
+regdom_now=Ahora: %s
+regdom_selfmanaged=Nota: algunas tarjetas (p. ej. Intel, "self-managed") lo ignoran y usan su propia detección.
+
+t_iwd_backend=NetworkManager: iwd como backend Wi-Fi
+nm_missing=No se encontró NetworkManager (nmcli) – este paso lo requiere.
+backend_current=Backend actual: %s
+iwd_missing=iwd no está instalado.
+nm_restart_warn=Al reiniciar NetworkManager la conexión Wi-Fi se corta brevemente.
+nm_restart_warn2=Las contraseñas Wi-Fi guardadas se conservan; si hace falta, vuelve a conectar.
+nm_restart_ask=¿Reiniciar NetworkManager (e iwd) ahora?
+restarted_backend=Reiniciado. Backend actual: %s
+after_reboot=Se aplicará en el próximo reinicio.
+
+t_revert=Deshacer backend iwd
+revert_nothing=%s no existe – nada que hacer.
+revert_ask=¿Eliminar este archivo (se guarda una copia) y volver a wpa_supplicant?
+revert_disable_iwd=¿Desactivar el servicio iwd?
+nm_restart_now=¿Reiniciar NetworkManager ahora?
+
+t_powersave=Desactivar el ahorro de energía Wi-Fi
+no_wifi=No se encontró ninguna interfaz Wi-Fi (¿está conectado el dongle?).
+driver=controlador
+all=todas
+which_iface=¿Qué interfaz (p. ej. la del dongle de la Frame)?
+ps_off_temp=%s: ahorro de energía desactivado (hasta reiniciar).
+ps_persist_ask=¿Desactivarlo de forma permanente (configuración de NetworkManager + iwd)?
+ps_persist_note=Se aplica tras reiniciar NetworkManager/iwd o el equipo.
+
+t_iwd_tuning=iwd: umbral de roaming y escaneo periódico
+iwd_tuning_info=Evita que iwd busque otras redes mientras transmites (tirones).
+iwd_inactive=iwd no está activo – estos ajustes solo funcionan con iwd (ver opción backend iwd).
+write_anyway=¿Escribirlo de todos modos?
+iwd_restart_warn=Reiniciar iwd desconecta el Wi-Fi brevemente.
+iwd_restart_ask=¿Reiniciar iwd ahora?
+
+t_fedora=Fedora: RPM Fusion, multimedia/ffmpeg y Mesa freeworld (fuente: DasChaos)
+fedora_only=Solo necesario en Fedora – %s ya incluye estos códecs/controladores o los obtiene de otra forma.
+fedora_atomic=Fedora atómico detectado. Estos comandos dnf no funcionan aquí.
+fedora_atomic2=Bazzite/Aurora ya lo incluyen; en Silverblue sigue la guía de RPM Fusion para rpm-ostree.
+fedora_s1=1/3 Configurando RPM Fusion (free + nonfree)
+rpmfusion_ok=RPM Fusion ya está configurado.
+fedora_s2=2/3 Multimedia y ffmpeg completo
+fedora_s3=3/3 Cambiando los controladores Mesa por las variantes freeworld (codificación H.264/H.265 por hardware)
+swap_failed=No se pudo cambiar %s.
+skipped_missing=%s no está instalado – omitido.
+fedora_done=Multimedia de Fedora listo.
+
+t_audio=Audio: PipeWire-Pulse (fuente: Linux VR Adventures)
+pw_running=PipeWire-Pulse ya está en ejecución (%s).
+reinstall=¿Instalar el paquete (de nuevo) de todos modos?
+audio_current=Servidor de audio actual: %s
+pacman_pulse=pacman puede preguntar si reemplazar 'pulseaudio' – confirma con 'y'.
+unknown_distro=Distribución desconocida.
+pulse_disable=Desactivando PulseAudio para que PipeWire tome el control:
+audio_now=Servidor de audio ahora: %s
+relogin=Si hace falta, cierra sesión y vuelve a entrar.
+
+t_steam=Steam: parámetro de inicio -pipewire-dmabuf (pantalla compartida, VRChat …)
+steam_none=No se encontró ninguna entrada de escritorio de Steam. Inicia Steam manualmente así:
+which_steam=¿Qué instalación de Steam?
+dmabuf_present=%s ya contiene -pipewire-dmabuf.
+change_for=Cambio en %s:
+before=antes
+after=después
+steam_restart=Cierra Steam por completo y vuelve a abrirlo desde el menú. En una terminal: steam -pipewire-dmabuf
+
+t_firewall=Reglas de cortafuegos para Steam Remote Play / SteamVR (fuente: Steam)
+firewalld_active=firewalld está activo.
+fw_no_service=Servicio 'steam-streaming' desconocido – se abren los puertos directamente.
+firewalld_done=Reglas de firewalld aplicadas (zona predeterminada).
+ufw_found=ufw encontrado: %s
+ufw_inactive=ufw no está activo – las reglas se guardan pero solo funcionan tras 'sudo ufw enable'.
+add_anyway=¿Añadir las reglas de todos modos?
+fw_not_needed=No se encontró ufw ni firewalld activo – no hacen falta reglas.
+fw_fedora_hint=Fedora suele usar firewalld – ¿está el servicio en marcha? (systemctl status firewalld)
+
+t_trusted=Conexión de la Steam Frame en la zona 'trusted' (firewalld)
+nmcli_missing=No se encontró nmcli.
+trusted_nofw=firewalld no está activo – las zonas no tienen efecto (con ufw no hace falta).
+set_anyway=¿Aplicarlo de todos modos?
+no_frame=No se encontró ningún perfil 'frame_…'. ¿Se ha conectado ya la Frame mediante el dongle?
+choose_all=¿Elegir entre todas las conexiones?
+which_profile=¿Qué perfil de conexión?
+current_zone=Zona actual: %s
+reactivate=¿Reactivar la conexión '%s' ahora?
+zone_done='%s' está ahora en la zona 'trusted'.
+
+source=Fuente: %s
+dl_failed=La descarga falló.
+no_dl_tool=No está instalado ni curl ni wget.
+got_html=Se descargó una página HTML en lugar de un script – cancelado.
+downloaded=Descargado en %s (%s líneas)
+view_first=¿Ver el script antes de ejecutarlo?
+run_sudo=¿Ejecutar el script con sudo ahora?
+still_at=El script sigue en %s.
+
+t_all=Todos los pasos recomendados seguidos
+ask_each=Se preguntará antes de cada paso.
+run_step=¿Ejecutar "%s"?
+step_failed=El paso terminó con un error – se continúa con el siguiente.
+all_done=Terminado. Se recomienda reiniciar.
+
+menu_title=Steam Frame – Asistente de configuración Linux
+system=Sistema
+m1=Información del sistema / diagnóstico
+m2=Configurar dominio regulatorio Wi-Fi
+m3=NetworkManager → backend iwd
+m4=Desactivar ahorro de energía Wi-Fi
+m5=iwd: umbral de roaming y escaneo
+m6=Fedora: RPM Fusion / multimedia / Mesa freeworld
+m7=Audio: PipeWire-Pulse
+m8=Iniciar Steam con -pipewire-dmabuf
+m9=Reglas de cortafuegos (ufw / firewalld)
+m10=Conexión de la Frame en zona 'trusted'
+m11=Script de diagnóstico del dongle de Valve
+mA=Ejecutar todos los pasos recomendados
+mR=Deshacer backend iwd
+mL=Idioma
+m0=Salir
+invalid=Opción no válida.
+bye=¡Adiós!
+
+unknown_opt=Opción desconocida: %s
+bad_lang=Idioma no soportado: %s (disponibles: %s)
+no_root=Ejecútalo como usuario normal (no con sudo) – el script pide sudo cuando lo necesita.
+need_sudo=Se necesita sudo.
+unsupported=La distribución '%s' no está soportada oficialmente (Arch/CachyOS, Fedora, Debian/Ubuntu/Mint).
+continue_anyway=¿Continuar de todos modos?
+sudo_info=Se necesita sudo para los cambios en el sistema.
+sudo_failed=Falló la autenticación con sudo.
+usage=Uso: %s [--dry-run] [--lang %s]\n\n  -n, --dry-run   solo mostrar, no cambiar nada\n  -l, --lang      idioma de la interfaz (predeterminado: según $LANG)\n  -h, --help      esta ayuda\n
+
+# USB autosuspend (GRUB)
+m12=Desactivar suspensión USB (parámetro de GRUB)
+t_usb=Desactivar la suspensión automática USB (parámetro del kernel usbcore.autosuspend=-1)
+usb_info=Evita que el kernel suspenda dispositivos USB (p. ej. el dongle de la Frame), lo que puede provocar desconexiones.
+usb_current=Valor actual de suspensión USB: %s (-1 = desactivado, predeterminado 2 segundos)
+usb_grub_already=GRUB ya contiene %s.
+usb_remove_ask=¿Quitar el parámetro de nuevo?
+usb_regen=Regenerando la configuración de GRUB:
+usb_reboot=Se aplica tras reiniciar.
+grub_no_tool=No se encontró ninguna herramienta de GRUB (update-grub / grub-mkconfig / grub2-mkconfig).
+usb_no_grub=No se encontró GRUB (gestor de arranque: %s) – el cambio automático solo funciona con GRUB.
+usb_hint_limine=Manualmente: añade %s a KERNEL_CMDLINE[default] en /etc/default/limine y ejecuta: sudo limine-update
+usb_hint_sdboot=Manualmente: añade %s a LINUX_OPTIONS en /etc/sdboot-manage.conf y ejecuta: sudo sdboot-manage gen
+usb_hint_systemdboot=Manualmente: añade %s a la línea "options" de las entradas en /boot/loader/entries/.
+usb_hint_other=Manualmente: añade %s a la línea de comandos del kernel de tu gestor de arranque.
+usb_now_ask=¿Desactivar también ahora la suspensión USB (hasta reiniciar)?
+usb_now_note=Se aplica a dispositivos conectados de nuevo – desconecta y vuelve a conectar el dongle.
+l_bootloader=Gestor de arranque:
+l_usb=Suspensión USB:
+usb_value=%s  (-1 = desactivado)

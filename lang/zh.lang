@@ -1,0 +1,207 @@
+# Steam Frame Setup – Chinese, Simplified (简体中文)
+# Format: key=value  (printf placeholders: %s, line break: \n)
+
+lang_name=简体中文
+yes_words=y yes 是 是的 好
+no_words=n no 否 不
+hint_yes=[Y/n]
+hint_no=[y/N]
+pause=按 [Enter] 继续 ...
+lang_keep=选择 [Enter = %s]:
+
+dry_nothing=演练模式：未写入任何内容。
+file_uptodate=%s 已是最新。
+changes_to=对 %s 的更改：
+old=旧
+new=新
+file_written=已写入 %s。
+install_manually=未知发行版 – 请手动安装：%s
+atomic_layer=原子系统（Silverblue/Kinoite/Bazzite …）：软件包通过 rpm-ostree 叠加安装，需要重启。
+not_installed=未安装 '%s'。
+install_now=现在安装软件包 '%s' 吗？
+cancel=取消
+choice=选择：
+unknown=未知
+
+t_diag=系统信息 / 诊断
+l_distro=发行版：
+l_atomic=原子 / ostree 系统
+l_kernel=内核：
+l_regdom=Wi-Fi 监管域：
+iw_missing=（未安装 iw）
+l_backend=NetworkManager 后端：
+backend_default=wpa_supplicant（默认）
+l_iwd=iwd 服务：
+l_powersave=省电模式 %s：
+l_iwdconf=iwd main.conf：
+not_present=不存在
+l_firewall=防火墙：
+fw_firewalld=firewalld 已启用（默认区域：%s）
+fw_needsudo=需要 sudo 才能查看状态
+fw_none=未找到（ufw/firewalld）
+l_audio=音频服务器：
+l_frame=Steam Frame 配置：
+none_found=未找到
+l_dmabuf=Steam -pipewire-dmabuf：
+not_set=未设置
+
+t_regdom=Wi-Fi 监管域（国家代码）
+regdom_current=当前全局监管域：%s
+already_set=已设置。
+change_anyway=仍要更改吗？
+regdom_00="00" = 全球/最低限度 – Steam Frame 可用的 5 GHz 信道受限。
+regdom_prompt=国家代码（ISO，例如 CN、TW、SG）[%s]：
+regdom_invalid=请输入两个字母。
+regdom_apply=立即生效（重启前有效，重启后由配置文件接管）：
+regdom_now=当前：%s
+regdom_selfmanaged=提示：部分网卡（例如 Intel，"self-managed"）会忽略此设置并使用自身的检测。
+
+t_iwd_backend=NetworkManager：使用 iwd 作为 Wi-Fi 后端
+nm_missing=未找到 NetworkManager（nmcli）– 此步骤需要 NetworkManager。
+backend_current=当前后端：%s
+iwd_missing=未安装 iwd。
+nm_restart_warn=重启 NetworkManager 会短暂断开 Wi-Fi 连接。
+nm_restart_warn2=已保存的 Wi-Fi 密码会保留；如有需要请重新连接一次。
+nm_restart_ask=现在重启 NetworkManager（和 iwd）吗？
+restarted_backend=已重启。当前后端：%s
+after_reboot=将在下次重启后生效。
+
+t_revert=撤销 iwd 后端
+revert_nothing=%s 不存在 – 无需操作。
+revert_ask=删除此文件（会保留备份）并恢复为 wpa_supplicant 吗？
+revert_disable_iwd=禁用 iwd 服务吗？
+nm_restart_now=现在重启 NetworkManager 吗？
+
+t_powersave=关闭 Wi-Fi 省电模式
+no_wifi=未找到 Wi-Fi 接口（接收器已插入吗？）。
+driver=驱动
+all=全部
+which_iface=选择哪个接口（例如 Frame 接收器的接口）？
+ps_off_temp=%s：省电模式已关闭（重启前有效）。
+ps_persist_ask=永久关闭（NetworkManager + iwd 配置）吗？
+ps_persist_note=重启 NetworkManager/iwd 或电脑后生效。
+
+t_iwd_tuning=iwd：漫游阈值与周期性扫描
+iwd_tuning_info=防止 iwd 在串流时搜索其他网络（导致卡顿）。
+iwd_inactive=iwd 未运行 – 这些设置仅在使用 iwd 时有效（参见菜单项 iwd 后端）。
+write_anyway=仍要写入吗？
+iwd_restart_warn=重启 iwd 会短暂断开 Wi-Fi。
+iwd_restart_ask=现在重启 iwd 吗？
+
+t_fedora=Fedora：RPM Fusion、多媒体/ffmpeg 与 Mesa freeworld（来源：DasChaos）
+fedora_only=仅 Fedora 需要 – %s 已自带这些编解码器/驱动，或通过其他方式获取。
+fedora_atomic=检测到原子版 Fedora。这些 dnf 命令在此无效。
+fedora_atomic2=Bazzite/Aurora 已包含这些内容；Silverblue 请参考 RPM Fusion 的 rpm-ostree 指南。
+fedora_s1=1/3 配置 RPM Fusion（free + nonfree）
+rpmfusion_ok=RPM Fusion 已配置。
+fedora_s2=2/3 多媒体与完整版 ffmpeg
+fedora_s3=3/3 将 Mesa 驱动替换为 freeworld 版本（H.264/H.265 硬件编码）
+swap_failed=替换 %s 失败。
+skipped_missing=未安装 %s – 已跳过。
+fedora_done=Fedora 多媒体配置完成。
+
+t_audio=音频：PipeWire-Pulse（来源：Linux VR Adventures）
+pw_running=PipeWire-Pulse 已在运行（%s）。
+reinstall=仍要（重新）安装软件包吗？
+audio_current=当前音频服务器：%s
+pacman_pulse=pacman 可能会询问是否替换 'pulseaudio' – 请输入 'y' 确认。
+unknown_distro=未知发行版。
+pulse_disable=正在禁用 PulseAudio，由 PipeWire 接管：
+audio_now=当前音频服务器：%s
+relogin=如有需要，请注销后重新登录。
+
+t_steam=Steam：启动参数 -pipewire-dmabuf（共享屏幕、VRChat …）
+steam_none=未找到 Steam 桌面项。请这样手动启动 Steam：
+which_steam=选择哪个 Steam 安装？
+dmabuf_present=%s 已包含 -pipewire-dmabuf。
+change_for=对 %s 的更改：
+before=之前
+after=之后
+steam_restart=请完全退出 Steam，然后从菜单重新启动。在终端中：steam -pipewire-dmabuf
+
+t_firewall=Steam 远程畅玩 / SteamVR 的防火墙规则（来源：Steam）
+firewalld_active=firewalld 已启用。
+fw_no_service=未知服务 'steam-streaming' – 将直接开放端口。
+firewalld_done=已设置 firewalld 规则（默认区域）。
+ufw_found=找到 ufw：%s
+ufw_inactive=ufw 未启用 – 规则会被保存，但需执行 'sudo ufw enable' 后才生效。
+add_anyway=仍要添加规则吗？
+fw_not_needed=未找到 ufw 或已启用的 firewalld – 无需防火墙规则。
+fw_fedora_hint=Fedora 通常使用 firewalld – 服务是否在运行？（systemctl status firewalld）
+
+t_trusted=将 Steam Frame 连接加入 'trusted' 区域（firewalld）
+nmcli_missing=未找到 nmcli。
+trusted_nofw=firewalld 未启用 – 区域设置不会生效（使用 ufw 时无需此步骤）。
+set_anyway=仍要设置吗？
+no_frame=未找到 'frame_…' 配置。Frame 是否已通过接收器连接过至少一次？
+choose_all=从所有连接中选择吗？
+which_profile=选择哪个连接配置？
+current_zone=当前区域：%s
+reactivate=现在重新激活连接 '%s' 吗？
+zone_done='%s' 现已位于 'trusted' 区域。
+
+source=来源：%s
+dl_failed=下载失败。
+no_dl_tool=未安装 curl 或 wget。
+got_html=下载到的是 HTML 页面而不是脚本 – 已中止。
+downloaded=已下载到 %s（%s 行）
+view_first=运行前先查看脚本吗？
+run_sudo=现在使用 sudo 运行脚本吗？
+still_at=脚本仍保存在 %s。
+
+t_all=依次执行所有推荐步骤
+ask_each=每个步骤执行前都会询问。
+run_step=执行“%s”吗？
+step_failed=该步骤出错结束 – 继续下一步。
+all_done=完成。建议重启电脑。
+
+menu_title=Steam Frame – Linux 设置助手
+system=系统
+m1=系统信息 / 诊断
+m2=设置 Wi-Fi 监管域
+m3=NetworkManager → iwd 后端
+m4=关闭 Wi-Fi 省电模式
+m5=iwd：漫游阈值与扫描
+m6=Fedora：RPM Fusion / 多媒体 / Mesa freeworld
+m7=音频：PipeWire-Pulse
+m8=使用 -pipewire-dmabuf 启动 Steam
+m9=防火墙规则（ufw / firewalld）
+m10=将 Frame 连接加入 'trusted' 区域
+m11=Valve 接收器故障排查脚本
+m12=关闭 USB 自动休眠（GRUB 内核参数）
+mA=执行所有推荐步骤
+mR=撤销 iwd 后端
+mL=语言
+m0=退出
+invalid=无效的选择。
+bye=再见！
+
+unknown_opt=未知选项：%s
+bad_lang=不支持的语言：%s（可用：%s）
+no_root=请以普通用户身份运行（不要使用 sudo）– 脚本会在需要时自行请求 sudo。
+need_sudo=需要 sudo。
+unsupported=发行版 '%s' 未获官方支持（Arch/CachyOS、Fedora、Debian/Ubuntu/Mint）。
+continue_anyway=仍要继续吗？
+sudo_info=系统更改需要 sudo。
+sudo_failed=sudo 认证失败。
+usage=用法：%s [--dry-run] [--lang %s]\n\n  -n, --dry-run   仅显示将执行的操作，不做任何更改\n  -l, --lang      界面语言（默认：根据 $LANG）\n  -h, --help      显示此帮助\n
+
+# USB autosuspend (GRUB)
+t_usb=关闭 USB 自动休眠（内核参数 usbcore.autosuspend=-1）
+usb_info=防止内核让 USB 设备（例如 Frame 接收器）进入休眠，否则可能导致断连。
+usb_current=当前 USB 自动休眠值：%s（-1 = 关闭，默认 2 秒）
+usb_grub_already=GRUB 已包含 %s。
+usb_remove_ask=要再次移除该参数吗？
+usb_regen=正在重新生成 GRUB 配置：
+usb_reboot=重启后生效。
+grub_no_tool=未找到 GRUB 工具（update-grub / grub-mkconfig / grub2-mkconfig）。
+usb_no_grub=未找到 GRUB（引导程序：%s）– 自动修改仅支持 GRUB。
+usb_hint_limine=手动操作：在 /etc/default/limine 的 KERNEL_CMDLINE[default] 中添加 %s，然后运行：sudo limine-update
+usb_hint_sdboot=手动操作：在 /etc/sdboot-manage.conf 的 LINUX_OPTIONS 中添加 %s，然后运行：sudo sdboot-manage gen
+usb_hint_systemdboot=手动操作：在 /boot/loader/entries/ 中各条目的 "options" 行末尾添加 %s。
+usb_hint_other=手动操作：将 %s 添加到引导程序的内核命令行中。
+usb_now_ask=同时立即关闭 USB 自动休眠吗（重启前有效）？
+usb_now_note=仅对新插入的设备生效 – 请将接收器拔出后重新插入一次。
+l_bootloader=引导程序：
+l_usb=USB 自动休眠：
+usb_value=%s  （-1 = 关闭）

@@ -1,0 +1,207 @@
+# Steam Frame Setup – Japanese (日本語)
+# Format: key=value  (printf placeholders: %s, line break: \n)
+
+lang_name=日本語
+yes_words=y yes はい
+no_words=n no いいえ
+hint_yes=[Y/n]
+hint_no=[y/N]
+pause=[Enter] を押して続行 ...
+lang_keep=選択 [Enter = %s]:
+
+dry_nothing=ドライラン：何も書き込まれていません。
+file_uptodate=%s はすでに最新です。
+changes_to=%s への変更：
+old=変更前
+new=変更後
+file_written=%s を書き込みました。
+install_manually=不明なディストリビューションです – 手動でインストールしてください：%s
+atomic_layer=アトミックシステム（Silverblue/Kinoite/Bazzite …）：パッケージは rpm-ostree で重ねてインストールされます。再起動が必要です。
+not_installed='%s' はインストールされていません。
+install_now=パッケージ '%s' を今すぐインストールしますか？
+cancel=キャンセル
+choice=選択：
+unknown=不明
+
+t_diag=システム情報 / 診断
+l_distro=ディストリビューション：
+l_atomic=アトミック / ostree システム
+l_kernel=カーネル：
+l_regdom=Wi-Fi 規制ドメイン：
+iw_missing=（iw 未インストール）
+l_backend=NetworkManager バックエンド：
+backend_default=wpa_supplicant（デフォルト）
+l_iwd=iwd サービス：
+l_powersave=省電力 %s：
+l_iwdconf=iwd main.conf：
+not_present=なし
+l_firewall=ファイアウォール：
+fw_firewalld=firewalld 有効（デフォルトゾーン：%s）
+fw_needsudo=状態の確認には sudo が必要
+fw_none=見つかりません（ufw/firewalld）
+l_audio=オーディオサーバー：
+l_frame=Steam Frame プロファイル：
+none_found=見つかりません
+l_dmabuf=Steam -pipewire-dmabuf：
+not_set=未設定
+
+t_regdom=Wi-Fi 規制ドメイン（国コード）
+regdom_current=現在のグローバル規制ドメイン：%s
+already_set=すでに設定されています。
+change_anyway=それでも変更しますか？
+regdom_00="00" = ワールド/最小限 – Steam Frame で使える 5 GHz チャンネルが制限されます。
+regdom_prompt=国コード（ISO、例：JP）[%s]：
+regdom_invalid=アルファベット 2 文字で入力してください。
+regdom_apply=今すぐ適用します（再起動まで有効、その後は設定ファイルが反映されます）：
+regdom_now=現在：%s
+regdom_selfmanaged=注意：一部のカード（例：Intel、"self-managed"）はこの設定を無視し、独自の判定を使います。
+
+t_iwd_backend=NetworkManager：Wi-Fi バックエンドに iwd を使用
+nm_missing=NetworkManager（nmcli）が見つかりません – この手順には NetworkManager が必要です。
+backend_current=現在のバックエンド：%s
+iwd_missing=iwd がインストールされていません。
+nm_restart_warn=NetworkManager を再起動すると Wi-Fi 接続が一時的に切れます。
+nm_restart_warn2=保存済みの Wi-Fi パスワードは保持されます。必要なら一度再接続してください。
+nm_restart_ask=NetworkManager（と iwd）を今すぐ再起動しますか？
+restarted_backend=再起動しました。現在のバックエンド：%s
+after_reboot=次回の再起動後に有効になります。
+
+t_revert=iwd バックエンドを元に戻す
+revert_nothing=%s は存在しません – 何もする必要はありません。
+revert_ask=このファイルを削除して（バックアップは残ります）wpa_supplicant に戻しますか？
+revert_disable_iwd=iwd サービスを無効にしますか？
+nm_restart_now=NetworkManager を今すぐ再起動しますか？
+
+t_powersave=Wi-Fi の省電力モードを無効化
+no_wifi=Wi-Fi インターフェースが見つかりません（ドングルは接続されていますか？）。
+driver=ドライバー
+all=すべて
+which_iface=どのインターフェースですか（例：Frame ドングルのもの）？
+ps_off_temp=%s：省電力をオフにしました（再起動まで）。
+ps_persist_ask=恒久的に無効化しますか（NetworkManager + iwd の設定）？
+ps_persist_note=NetworkManager/iwd またはコンピューターの再起動後に有効になります。
+
+t_iwd_tuning=iwd：ローミングしきい値と定期スキャン
+iwd_tuning_info=ストリーミング中に iwd が他のネットワークを探すのを防ぎます（カクつき対策）。
+iwd_inactive=iwd が動作していません – これらの設定は iwd 使用時のみ有効です（メニューの iwd バックエンドを参照）。
+write_anyway=それでも書き込みますか？
+iwd_restart_warn=iwd を再起動すると Wi-Fi が一時的に切断されます。
+iwd_restart_ask=iwd を今すぐ再起動しますか？
+
+t_fedora=Fedora：RPM Fusion、マルチメディア/ffmpeg と Mesa freeworld（出典：DasChaos）
+fedora_only=Fedora でのみ必要です – %s にはこれらのコーデック/ドライバーが既に含まれているか、別の方法で提供されます。
+fedora_atomic=アトミック版 Fedora を検出しました。ここではこれらの dnf コマンドは使えません。
+fedora_atomic2=Bazzite/Aurora には既に含まれています。Silverblue では RPM Fusion の rpm-ostree 向けガイドに従ってください。
+fedora_s1=1/3 RPM Fusion（free + nonfree）を設定中
+rpmfusion_ok=RPM Fusion は設定済みです。
+fedora_s2=2/3 マルチメディアと完全版 ffmpeg
+fedora_s3=3/3 Mesa ドライバーを freeworld 版に置き換え中（H.264/H.265 ハードウェアエンコード）
+swap_failed=%s の置き換えに失敗しました。
+skipped_missing=%s はインストールされていません – スキップしました。
+fedora_done=Fedora マルチメディアの設定が完了しました。
+
+t_audio=オーディオ：PipeWire-Pulse（出典：Linux VR Adventures）
+pw_running=PipeWire-Pulse は既に動作しています（%s）。
+reinstall=それでもパッケージを（再）インストールしますか？
+audio_current=現在のオーディオサーバー：%s
+pacman_pulse=pacman が 'pulseaudio' を置き換えるか尋ねる場合があります – 'y' で確定してください。
+unknown_distro=不明なディストリビューションです。
+pulse_disable=PipeWire に切り替えるため PulseAudio を無効化します：
+audio_now=現在のオーディオサーバー：%s
+relogin=必要に応じて一度ログアウトし、再ログインしてください。
+
+t_steam=Steam：起動オプション -pipewire-dmabuf（画面共有、VRChat …）
+steam_none=Steam のデスクトップエントリが見つかりません。次のように手動で起動してください：
+which_steam=どの Steam インストールですか？
+dmabuf_present=%s には既に -pipewire-dmabuf が含まれています。
+change_for=%s への変更：
+before=変更前
+after=変更後
+steam_restart=Steam を完全に終了し、メニューから再度起動してください。ターミナルでは：steam -pipewire-dmabuf
+
+t_firewall=Steam Remote Play / SteamVR 用ファイアウォールルール（出典：Steam）
+firewalld_active=firewalld が有効です。
+fw_no_service=サービス 'steam-streaming' が不明です – ポートを直接開放します。
+firewalld_done=firewalld のルールを設定しました（デフォルトゾーン）。
+ufw_found=ufw を検出：%s
+ufw_inactive=ufw が無効です – ルールは保存されますが、'sudo ufw enable' の後に有効になります。
+add_anyway=それでもルールを追加しますか？
+fw_not_needed=ufw も有効な firewalld も見つかりません – ファイアウォールルールは不要です。
+fw_fedora_hint=Fedora は通常 firewalld を使います – サービスは動作していますか？（systemctl status firewalld）
+
+t_trusted=Steam Frame の接続を 'trusted' ゾーンへ（firewalld）
+nmcli_missing=nmcli が見つかりません。
+trusted_nofw=firewalld が無効です – ゾーンは効果がありません（ufw では不要）。
+set_anyway=それでも設定しますか？
+no_frame='frame_…' プロファイルが見つかりません。Frame をドングル経由で一度でも接続しましたか？
+choose_all=すべての接続から選びますか？
+which_profile=どの接続プロファイルですか？
+current_zone=現在のゾーン：%s
+reactivate=接続 '%s' を今すぐ再有効化しますか？
+zone_done='%s' は 'trusted' ゾーンに入りました。
+
+source=出典：%s
+dl_failed=ダウンロードに失敗しました。
+no_dl_tool=curl も wget もインストールされていません。
+got_html=スクリプトではなく HTML ページがダウンロードされました – 中止します。
+downloaded=%s にダウンロードしました（%s 行）
+view_first=実行前にスクリプトを表示しますか？
+run_sudo=今すぐ sudo でスクリプトを実行しますか？
+still_at=スクリプトは %s に残っています。
+
+t_all=推奨手順をすべて順番に実行
+ask_each=各手順の前に確認します。
+run_step=「%s」を実行しますか？
+step_failed=手順がエラーで終了しました – 次の手順に進みます。
+all_done=完了しました。再起動をおすすめします。
+
+menu_title=Steam Frame – Linux セットアップヘルパー
+system=システム
+m1=システム情報 / 診断
+m2=Wi-Fi 規制ドメインを設定
+m3=NetworkManager → iwd バックエンド
+m4=Wi-Fi 省電力モードを無効化
+m5=iwd：ローミングしきい値とスキャン
+m6=Fedora：RPM Fusion / マルチメディア / Mesa freeworld
+m7=オーディオ：PipeWire-Pulse
+m8=-pipewire-dmabuf 付きで Steam を起動
+m9=ファイアウォールルール（ufw / firewalld）
+m10=Frame の接続を 'trusted' ゾーンへ
+m11=Valve ドングル トラブルシュートスクリプト
+m12=USB 自動サスペンドを無効化（GRUB カーネルパラメーター）
+mA=推奨手順をすべて実行
+mR=iwd バックエンドを元に戻す
+mL=言語
+m0=終了
+invalid=無効な選択です。
+bye=さようなら！
+
+unknown_opt=不明なオプション：%s
+bad_lang=未対応の言語：%s（利用可能：%s）
+no_root=通常ユーザーで実行してください（sudo は付けない）– スクリプトが必要に応じて sudo を要求します。
+need_sudo=sudo が必要です。
+unsupported=ディストリビューション '%s' は公式にはサポートされていません（Arch/CachyOS、Fedora、Debian/Ubuntu/Mint）。
+continue_anyway=それでも続行しますか？
+sudo_info=システムの変更には sudo が必要です。
+sudo_failed=sudo の認証に失敗しました。
+usage=使い方：%s [--dry-run] [--lang %s]\n\n  -n, --dry-run   実行内容を表示するだけで、何も変更しない\n  -l, --lang      表示言語（デフォルト：$LANG から判定）\n  -h, --help      このヘルプ\n
+
+# USB autosuspend (GRUB)
+t_usb=USB 自動サスペンドを無効化（カーネルパラメーター usbcore.autosuspend=-1）
+usb_info=カーネルが USB デバイス（例：Frame ドングル）をスリープさせるのを防ぎます。スリープは切断の原因になることがあります。
+usb_current=現在の USB 自動サスペンド値：%s（-1 = オフ、デフォルト 2 秒）
+usb_grub_already=GRUB には既に %s が含まれています。
+usb_remove_ask=パラメーターを削除しますか？
+usb_regen=GRUB の設定を再生成中：
+usb_reboot=再起動後に有効になります。
+grub_no_tool=GRUB ツールが見つかりません（update-grub / grub-mkconfig / grub2-mkconfig）。
+usb_no_grub=GRUB が見つかりません（ブートローダー：%s）– 自動変更は GRUB のみ対応です。
+usb_hint_limine=手動：/etc/default/limine の KERNEL_CMDLINE[default] に %s を追加し、次を実行：sudo limine-update
+usb_hint_sdboot=手動：/etc/sdboot-manage.conf の LINUX_OPTIONS に %s を追加し、次を実行：sudo sdboot-manage gen
+usb_hint_systemdboot=手動：/boot/loader/entries/ 内の各エントリの "options" 行に %s を追記してください。
+usb_hint_other=手動：ブートローダーのカーネルコマンドラインに %s を追加してください。
+usb_now_ask=USB 自動サスペンドを今すぐ無効化しますか（再起動まで）？
+usb_now_note=新しく接続したデバイスに適用されます – ドングルを一度抜き差ししてください。
+l_bootloader=ブートローダー：
+l_usb=USB 自動サスペンド：
+usb_value=%s  （-1 = オフ）

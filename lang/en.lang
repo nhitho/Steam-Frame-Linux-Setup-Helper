@@ -1,0 +1,210 @@
+# Steam Frame Setup – English (base language; missing keys in other languages fall back to this file)
+# Format: key=value  (printf placeholders: %s, line break: \n)
+
+lang_name=English
+yes_words=y yes
+no_words=n no
+hint_yes=[Y/n]
+hint_no=[y/N]
+pause=Press [Enter] to continue ...
+choose_lang=Language / Sprache / Idioma / Langue / 语言 / 言語
+lang_keep=Choice [Enter = %s]:
+
+dry_nothing=Dry run: nothing written.
+file_uptodate=%s is already up to date.
+changes_to=Changes to %s:
+old=old
+new=new
+file_written=%s written.
+install_manually=Unknown distribution – please install manually: %s
+atomic_layer=Atomic system (Silverblue/Kinoite/Bazzite …): packages are layered via rpm-ostree, reboot required.
+not_installed='%s' is not installed.
+install_now=Install package '%s' now?
+cancel=Cancel
+choice=Choice:
+unknown=unknown
+
+t_diag=System info / diagnostics
+l_distro=Distribution:
+l_atomic=Atomic / ostree system
+l_kernel=Kernel:
+l_regdom=Wi-Fi regulatory domain:
+iw_missing=(iw not installed)
+l_backend=NetworkManager backend:
+backend_default=wpa_supplicant (default)
+l_iwd=iwd service:
+l_powersave=Power save %s:
+l_iwdconf=iwd main.conf:
+not_present=not present
+l_firewall=Firewall:
+fw_firewalld=firewalld active (default zone: %s)
+fw_ufw=ufw – %s
+fw_needsudo=status only with sudo
+fw_none=none found (ufw/firewalld)
+l_audio=Audio server:
+l_frame=Steam Frame profiles:
+none_found=none found
+l_dmabuf=Steam -pipewire-dmabuf:
+not_set=not set
+
+t_regdom=Wi-Fi regulatory domain (country code)
+regdom_current=Current global regulatory domain: %s
+already_set=Already set.
+change_anyway=Change anyway?
+regdom_00="00" = world/minimal – 5 GHz channels for the Steam Frame are restricted.
+regdom_prompt=Country code (ISO, e.g. DE, US, FR) [%s]:
+regdom_invalid=Please enter exactly two letters.
+regdom_apply=Applying immediately (until reboot, the configuration takes over afterwards):
+regdom_now=Now: %s
+regdom_selfmanaged=Note: some cards (e.g. Intel, "self-managed") ignore this and use their own detection.
+
+t_iwd_backend=NetworkManager: iwd as Wi-Fi backend
+nm_missing=NetworkManager (nmcli) not found – this step requires NetworkManager.
+backend_current=Current backend: %s
+iwd_missing=iwd is not installed.
+nm_restart_warn=Restarting NetworkManager briefly drops the Wi-Fi connection.
+nm_restart_warn2=Saved Wi-Fi passwords are kept; reconnect once if needed.
+nm_restart_ask=Restart NetworkManager (and iwd) now?
+restarted_backend=Restarted. Backend now: %s
+after_reboot=Takes effect after the next reboot.
+
+t_revert=Revert iwd backend
+revert_nothing=%s does not exist – nothing to do.
+revert_ask=Remove this file (a backup is kept) and go back to wpa_supplicant?
+revert_disable_iwd=Disable the iwd service?
+nm_restart_now=Restart NetworkManager now?
+
+t_powersave=Disable Wi-Fi power saving
+no_wifi=No Wi-Fi interface found (dongle plugged in?).
+driver=driver
+all=all
+which_iface=Which interface (e.g. the one of the Frame dongle)?
+ps_off_temp=%s: power save off (until reboot).
+ps_persist_ask=Disable permanently (NetworkManager + iwd configuration)?
+ps_persist_note=Takes effect after restarting NetworkManager/iwd or the computer.
+
+t_iwd_tuning=iwd: roaming threshold & periodic scanning
+iwd_tuning_info=Prevents iwd from scanning for other networks while streaming (stutter).
+iwd_inactive=iwd is not active – these settings only work with iwd (see menu item iwd backend).
+write_anyway=Write anyway?
+iwd_restart_warn=Restarting iwd briefly disconnects Wi-Fi.
+iwd_restart_ask=Restart iwd now?
+
+t_fedora=Fedora: RPM Fusion, multimedia/ffmpeg & Mesa freeworld (source: DasChaos)
+fedora_only=Only needed on Fedora – %s already ships these codecs/drivers or gets them differently.
+fedora_atomic=Atomic Fedora detected. These dnf commands do not work here.
+fedora_atomic2=Bazzite/Aurora already include this; on Silverblue follow the RPM Fusion guide for rpm-ostree.
+fedora_s1=1/3 Setting up RPM Fusion (free + nonfree)
+rpmfusion_ok=RPM Fusion is already set up.
+fedora_s2=2/3 Multimedia & full ffmpeg
+fedora_s3=3/3 Swapping Mesa drivers for freeworld variants (H.264/H.265 hardware encoding)
+swap_failed=Swapping %s failed.
+skipped_missing=%s not installed – skipped.
+fedora_done=Fedora multimedia done.
+
+t_audio=Audio: PipeWire-Pulse (source: Linux VR Adventures)
+pw_running=PipeWire-Pulse is already running (%s).
+reinstall=Install the package (again) anyway?
+audio_current=Current audio server: %s
+pacman_pulse=pacman may ask whether to replace 'pulseaudio' – confirm with 'y'.
+unknown_distro=Unknown distribution.
+pulse_disable=Disabling PulseAudio so PipeWire takes over:
+audio_now=Audio server now: %s
+relogin=Log out and back in if necessary.
+
+t_steam=Steam: launch option -pipewire-dmabuf (shared screen, VRChat …)
+steam_none=No Steam desktop entry found. Start Steam manually like this:
+which_steam=Which Steam installation?
+dmabuf_present=%s already contains -pipewire-dmabuf.
+change_for=Change for %s:
+before=before
+after=after
+steam_restart=Quit Steam completely and start it again from the menu. In a terminal: steam -pipewire-dmabuf
+
+t_firewall=Firewall rules for Steam Remote Play / SteamVR (source: Steam)
+firewalld_active=firewalld is active.
+fw_no_service=Service 'steam-streaming' unknown – opening the ports directly.
+firewalld_done=firewalld rules set (default zone).
+ufw_found=ufw found: %s
+ufw_inactive=ufw is not active – rules are saved but only take effect after 'sudo ufw enable'.
+add_anyway=Add rules anyway?
+fw_not_needed=Neither ufw nor an active firewalld found – no firewall rules needed.
+fw_fedora_hint=Fedora normally uses firewalld – is the service running? (systemctl status firewalld)
+
+t_trusted=Steam Frame connection into zone 'trusted' (firewalld)
+nmcli_missing=nmcli not found.
+trusted_nofw=firewalld is not active – zones have no effect then (not needed with ufw).
+set_anyway=Set anyway?
+no_frame=No 'frame_…' profile found. Has the Frame been connected via the dongle at least once?
+choose_all=Choose from all connections?
+which_profile=Which connection profile?
+current_zone=Current zone: %s
+reactivate=Re-activate connection '%s' now?
+zone_done='%s' is now in zone 'trusted'.
+
+t_valve=Valve: frame-dongle-troubleshoot.sh
+source=Source: %s
+dl_failed=Download failed.
+no_dl_tool=Neither curl nor wget is installed.
+got_html=An HTML page was downloaded instead of a script – aborted.
+downloaded=Downloaded to %s (%s lines)
+view_first=View the script before running it?
+run_sudo=Run the script with sudo now?
+still_at=The script remains at %s.
+
+t_all=All recommended steps in sequence
+ask_each=You will be asked before every step.
+run_step=Run "%s"?
+step_failed=Step ended with an error – continuing with the next one.
+all_done=Done. A reboot is recommended.
+
+menu_title=Steam Frame – Linux Setup Helper
+system=System
+m1=System info / diagnostics
+m2=Set Wi-Fi regulatory domain
+m3=NetworkManager → iwd backend
+m4=Disable Wi-Fi power saving
+m5=iwd: roaming threshold & scanning
+m6=Fedora: RPM Fusion / multimedia / Mesa freeworld
+m7=Audio: PipeWire-Pulse
+m8=Start Steam with -pipewire-dmabuf
+m9=Firewall rules (ufw / firewalld)
+m10=Frame connection into zone 'trusted'
+m11=Valve dongle troubleshoot script
+mA=Run all recommended steps
+mR=Revert iwd backend
+mL=Language
+m0=Quit
+invalid=Invalid choice.
+bye=Bye!
+
+unknown_opt=Unknown option: %s
+bad_lang=Unsupported language: %s (available: %s)
+no_root=Please run as a normal user (not with sudo) – the script asks for sudo itself.
+need_sudo=sudo is required.
+unsupported=Distribution '%s' is not officially supported (Arch/CachyOS, Fedora, Debian/Ubuntu/Mint).
+continue_anyway=Continue anyway?
+sudo_info=sudo is required for system changes.
+sudo_failed=sudo authentication failed.
+usage=Usage: %s [--dry-run] [--lang %s]\n\n  -n, --dry-run   only show what would be done, change nothing\n  -l, --lang      interface language (default: from $LANG)\n  -h, --help      this help\n
+
+# USB autosuspend (GRUB)
+m12=USB autosuspend off (GRUB kernel parameter)
+t_usb=USB autosuspend off (kernel parameter usbcore.autosuspend=-1)
+usb_info=Prevents the kernel from putting USB devices (e.g. the Frame dongle) to sleep, which can cause disconnects.
+usb_current=Current USB autosuspend value: %s (-1 = off, default 2 seconds)
+usb_grub_already=GRUB already contains %s.
+usb_remove_ask=Remove the parameter again?
+usb_regen=Regenerating the GRUB configuration:
+usb_reboot=Takes effect after a reboot.
+grub_no_tool=No GRUB tool found (update-grub / grub-mkconfig / grub2-mkconfig).
+usb_no_grub=No GRUB found (bootloader: %s) – the automatic change only works with GRUB.
+usb_hint_limine=Manually: add %s to KERNEL_CMDLINE[default] in /etc/default/limine, then run: sudo limine-update
+usb_hint_sdboot=Manually: add %s to LINUX_OPTIONS in /etc/sdboot-manage.conf, then run: sudo sdboot-manage gen
+usb_hint_systemdboot=Manually: append %s to the "options" line of the entries in /boot/loader/entries/.
+usb_hint_other=Manually: add %s to the kernel command line of your bootloader.
+usb_now_ask=Also disable USB autosuspend right now (until reboot)?
+usb_now_note=Applies to newly connected devices – unplug and replug the dongle once.
+l_bootloader=Bootloader:
+l_usb=USB autosuspend:
+usb_value=%s  (-1 = off)
