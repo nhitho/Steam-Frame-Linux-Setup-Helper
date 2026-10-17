@@ -142,11 +142,10 @@ zone_done='%s' は 'trusted' ゾーンに入りました。
 
 source=出典：%s
 dl_failed=ダウンロードに失敗しました。
-no_dl_tool=curl も wget もインストールされていません。
-got_html=スクリプトではなく HTML ページがダウンロードされました – 中止します。
 downloaded=%s にダウンロードしました（%s 行）
 view_first=実行前にスクリプトを表示しますか？
-run_sudo=今すぐ sudo でスクリプトを実行しますか？
+valve_run=今すぐスクリプトを実行しますか？
+valve_ufw_hint=ufw のチェックには root が必要なため、スクリプトはスキップしました。含めるには：sudo bash %s
 still_at=スクリプトは %s に残っています。
 
 t_all=推奨手順をすべて順番に実行
@@ -167,7 +166,7 @@ m7=オーディオ：PipeWire-Pulse
 m8=-pipewire-dmabuf 付きで Steam を起動
 m9=ファイアウォールルール（ufw / firewalld）
 m10=Frame の接続を 'trusted' ゾーンへ
-m11=Valve ドングル トラブルシュートスクリプト
+m11=ドングル トラブルシュートスクリプト（Valve の GitHub リポジトリ）
 m12=USB 自動サスペンドを無効化（GRUB カーネルパラメーター）
 mA=推奨手順をすべて実行
 mR=iwd バックエンドを元に戻す

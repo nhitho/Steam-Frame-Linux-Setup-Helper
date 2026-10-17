@@ -142,11 +142,10 @@ zone_done='%s' 现已位于 'trusted' 区域。
 
 source=来源：%s
 dl_failed=下载失败。
-no_dl_tool=未安装 curl 或 wget。
-got_html=下载到的是 HTML 页面而不是脚本 – 已中止。
 downloaded=已下载到 %s（%s 行）
 view_first=运行前先查看脚本吗？
-run_sudo=现在使用 sudo 运行脚本吗？
+valve_run=现在运行脚本吗？
+valve_ufw_hint=ufw 检查需要 root 权限，脚本已跳过。如需包含：sudo bash %s
 still_at=脚本仍保存在 %s。
 
 t_all=依次执行所有推荐步骤
@@ -167,7 +166,7 @@ m7=音频：PipeWire-Pulse
 m8=使用 -pipewire-dmabuf 启动 Steam
 m9=防火墙规则（ufw / firewalld）
 m10=将 Frame 连接加入 'trusted' 区域
-m11=Valve 接收器故障排查脚本
+m11=接收器故障排查脚本（来自 Valve 的 GitHub 仓库）
 m12=关闭 USB 自动休眠（GRUB 内核参数）
 mA=执行所有推荐步骤
 mR=撤销 iwd 后端

@@ -40,7 +40,7 @@ up every file it modifies. A `--dry-run` mode shows everything without touching 
 The distribution is detected automatically from `/etc/os-release`.
 
 **Requirements:** `bash`, `sudo` and **NetworkManager** (for the Wi-Fi steps). Missing tools
-such as `iw` or `iwd` are offered for installation when a step needs them.
+such as `iw`, `iwd` or `wget` are offered for installation when a step needs them.
 
 ## Languages
 
@@ -96,7 +96,7 @@ start directly with `--lang <code>`.
    8) Start Steam with -pipewire-dmabuf
    9) Firewall rules (ufw / firewalld)
   10) Frame connection into zone 'trusted'
-  11) Valve dongle troubleshoot script
+  11) Dongle troubleshoot script (from Valve's GitHub repo)
   12) USB autosuspend off (GRUB kernel parameter)
 
    A) Run all recommended steps
@@ -336,16 +336,21 @@ sudo nmcli connection up "<frame-profile>"
 
 Downloads Valve's official
 [`frame-dongle-troubleshoot.sh`](https://github.com/ValveSoftware/SteamVR-for-Linux/blob/master/frame-dongle-troubleshoot.sh)
-from the **raw** GitHub URL into a temporary folder. It shows the line count and SHA256,
-offers to show the script, and runs it with `sudo` only after you confirm.
+with `wget` from the **raw** GitHub URL into a temporary folder. It offers to show you the
+script first, and runs it only after you confirm.
+
+The script is read-only diagnostics: it checks kernel and `rtw89` driver, rfkill, regulatory
+domain, firewall and VPN interfaces, and prints `PROBLEM:` / `INFO:` lines. **It does not
+need root**, so this step runs it as your normal user. The only check that needs root is
+`ufw status`; the script notes that it skipped it, and you can re-run it with
+`sudo bash <file>` to include it.
 
 **By hand:**
 
 ```bash
 wget --https-only https://raw.githubusercontent.com/ValveSoftware/SteamVR-for-Linux/master/frame-dongle-troubleshoot.sh
 less frame-dongle-troubleshoot.sh      # read it first
-chmod +x frame-dongle-troubleshoot.sh
-sudo ./frame-dongle-troubleshoot.sh
+bash frame-dongle-troubleshoot.sh      # sudo only needed for the ufw check
 ```
 
 > Use the `raw.githubusercontent.com` URL. The normal GitHub link (`…/blob/…`) downloads

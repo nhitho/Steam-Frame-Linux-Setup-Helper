@@ -141,11 +141,10 @@ zone_done='%s' agora está na zona 'trusted'.
 
 source=Fonte: %s
 dl_failed=Falha no download.
-no_dl_tool=Nem curl nem wget está instalado.
-got_html=Foi baixada uma página HTML em vez de um script – cancelado.
 downloaded=Baixado em %s (%s linhas)
 view_first=Ver o script antes de executá-lo?
-run_sudo=Executar o script com sudo agora?
+valve_run=Executar o script agora?
+valve_ufw_hint=A verificação do ufw precisa de root, por isso o script a ignorou. Para incluí-la: sudo bash %s
 still_at=O script continua em %s.
 
 t_all=Todas as etapas recomendadas em sequência
@@ -166,7 +165,7 @@ m7=Áudio: PipeWire-Pulse
 m8=Iniciar a Steam com -pipewire-dmabuf
 m9=Regras de firewall (ufw / firewalld)
 m10=Conexão da Frame na zona 'trusted'
-m11=Script de diagnóstico do dongle da Valve
+m11=Script de diagnóstico do dongle (do repo GitHub da Valve)
 mA=Executar todas as etapas recomendadas
 mR=Desfazer backend iwd
 mL=Idioma
