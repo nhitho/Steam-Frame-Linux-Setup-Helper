@@ -48,9 +48,13 @@ step_diagnose() {
         label "$(t l_frame)" "${frames:-$(t none_found)}"
     fi
 
+    # Report whichever PipeWire option step 8 may have set
     local f found=
     for f in ~/.local/share/applications/steam.desktop ~/.local/share/applications/com.valvesoftware.Steam.desktop; do
-        [[ -e $f ]] && grep -qE '^Exec=.* -pipewire-dmabuf( |$)' "$f" && found=$f
+        [[ -e $f ]] || continue
+        found=$(grep -m1 -oE '^Exec=.* (-pipewire-dmabuf|-pipewire)( |$)' "$f" | grep -oE '\-pipewire(-dmabuf)?$|\-pipewire(-dmabuf)? ')
+        found=${found% }
+        [[ -n $found ]] && { found="$found  ($f)"; break; }
     done
     label "$(t l_dmabuf)" "${found:-$(t not_set)}"
 }

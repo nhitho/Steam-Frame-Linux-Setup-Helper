@@ -28,8 +28,9 @@ step_powersave() {
 
     if ask "$(t ps_persist_ask)"; then
         # 2 = disable (NetworkManager, applies to all Wi-Fi connections)
-        write_root_file "$NM_POWERSAVE_CONF" "[connection]
-wifi.powersave=2"
+        write_root_file "$NM_POWERSAVE_CONF" \
+            '[connection]' \
+            'wifi.powersave=2'
         # iwd: disable power save for all drivers
         ini_set "$IWD_MAIN_CONF" DriverQuirks PowerSaveDisable '*'
         info "$(t ps_persist_note)"

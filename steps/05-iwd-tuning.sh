@@ -9,9 +9,10 @@ step_iwd_tuning() {
         ask "$(t write_anyway)" || return 0
     fi
 
-    ini_set "$IWD_MAIN_CONF" General RoamThreshold -100
-    ini_set "$IWD_MAIN_CONF" General RoamThreshold5G -100
-    ini_set "$IWD_MAIN_CONF" Scan DisablePeriodicScan true
+    ini_set "$IWD_MAIN_CONF" \
+        General RoamThreshold       -100 \
+        General RoamThreshold5G     -100 \
+        Scan    DisablePeriodicScan true
 
     if systemctl is-active --quiet iwd 2>/dev/null; then
         warn "$(t iwd_restart_warn)"

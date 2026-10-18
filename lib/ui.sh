@@ -50,14 +50,14 @@ run() {
     "$@"
 }
 
-# Pick one entry from a list; result in REPLY_CHOICE
+# Pick one entry from a list; result in REPLY_CHOICE and REPLY_INDEX
 choose() {
     local prompt=$1; shift
     local -a items=("$@")
-    REPLY_CHOICE=
+    REPLY_CHOICE=; REPLY_INDEX=
     (( ${#items[@]} )) || return 1
     if (( ${#items[@]} == 1 )); then
-        REPLY_CHOICE=${items[0]}
+        REPLY_CHOICE=${items[0]}; REPLY_INDEX=0
         info "$prompt $REPLY_CHOICE"
         return 0
     fi
@@ -69,7 +69,7 @@ choose() {
         read -rp "$(t choice) " n
         [[ $n == 0 ]] && return 1
         if [[ $n =~ ^[0-9]+$ ]] && (( n >= 1 && n <= ${#items[@]} )); then
-            REPLY_CHOICE=${items[n - 1]}
+            REPLY_CHOICE=${items[n - 1]}; REPLY_INDEX=$((n - 1))
             return 0
         fi
     done

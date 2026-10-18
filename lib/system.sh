@@ -70,6 +70,27 @@ current_regdom() {
         /^phy/                     { seen = 1 }'
 }
 
+# Country codes the local regulatory database knows, one per line.
+# No output means no list is available on this system.
+available_regdoms() {
+    {
+        if command -v regdbdump >/dev/null && [[ -r /usr/lib/firmware/regulatory.db ]]; then
+            regdbdump /usr/lib/firmware/regulatory.db 2>/dev/null |
+                awk '/^country /{ sub(":", "", $2); print $2 }'
+        elif [[ -r $ARCH_REGDOM_CONF ]]; then
+            grep -oE 'WIRELESS_REGDOM="[A-Z0-9]{2}"' "$ARCH_REGDOM_CONF" | cut -d'"' -f2
+        fi
+    } | grep -vx 00 | sort -u
+}
+
+# Is a package with exactly this name available in the enabled repos?
+# A name that only exists as a virtual provide — mesa-va-drivers is one of
+# mesa-dri-drivers from Fedora 44 on — gives false, which is what the Mesa
+# handling needs in order to tell the two cases apart.
+rpm_pkg_available() {
+    dnf repoquery --qf '%{name}' "$1" 2>/dev/null | grep -qx "$1"
+}
+
 nm_wifi_backend() {
     local b
     b=$(cat /etc/NetworkManager/NetworkManager.conf /etc/NetworkManager/conf.d/*.conf 2>/dev/null |

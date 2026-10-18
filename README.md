@@ -2,19 +2,52 @@
 
 An interactive, multilingual shell script that applies the known Linux tweaks for the
 **Valve Steam Frame** and its Wi-Fi dongle: regulatory domain, iwd backend, Wi-Fi power
-saving, roaming/scan behaviour, firewall rules, audio, the Steam `-pipewire-dmabuf`
-launch option and USB autosuspend.
+saving, roaming/scan behaviour, firewall rules, audio, the Steam PipeWire
+launch option.
 
 Every step shows what it is going to change (as a diff), asks before doing it, and backs
 up every file it modifies. A `--dry-run` mode shows everything without touching the system.
 
-> **Disclaimer:** This is a community project and is not affiliated with or endorsed by Valve.
-> Use it at your own risk and read what each step does before confirming it.
+---
+
+## Please read this first
+
+This is a small hobby project, not a product. It works on the machines it was built on, but
+it is maintained by one person in their spare time.
+
+**It needs `sudo`, and that deserves a moment's thought.** Most of the steps write to
+`/etc`, install packages or restart services, so there is no way around root. At the same
+time, the usual advice holds: do not hand root to a script you found on the internet
+without looking at it. So please look at it. The code is deliberately split into small
+files — one per menu entry under `steps/` — so each step can be read on its own in a minute
+or two. Start the script with `--dry-run`: it prints every command and every file change as
+a diff without touching anything.
+
+**Use it at your own risk.** It changes network configuration, firewall rules and, on
+Fedora, graphics drivers. Every step asks before it acts and backs up each file it
+modifies, and menu entries **R**, **M** and **S** undo those changes again. Even so,
+something can go wrong on a system that differs from the ones it was tested on. If your
+machine matters to you, try it in a virtual machine first.
+
+**On how it was written:** parts of this were written with AI assistance, if
+you like. That is not an excuse for anything: every step was read through and tried out on
+several machines here at home before it landed. But you should know, and it is one more
+reason to read the code rather than trust it. Fixes and corrections are very welcome.
+
+**No affiliation.** This project has nothing to do with Valve, and is not endorsed by Valve,
+RPM Fusion or any of the other projects it touches. All trademarks belong to their owners.
+The sources the steps are based on are credited under
+[Credits and links](#credits-and-links).
+
+**The code is free for anyone to use.** It is under the [MIT License](LICENSE), so use it,
+change it, pass it on, build something else from it — keeping the copyright notice is the
+only condition.
 
 ---
 
 ## Contents
 
+- [Please read this first](#please-read-this-first)
 - [Supported systems](#supported-systems)
 - [Languages](#languages)
 - [Quick start](#quick-start)
@@ -76,9 +109,8 @@ start directly with `--lang <code>`.
    ./steam-frame-setup.sh
    ```
 
-5. **Start with `1) System info / diagnostics`** to see the current state. Then either run
-   the steps one by one, or choose **`A`** to go through all recommended steps in order.
-   You will be asked before every step.
+5. **Start with `1) System info / diagnostics`** to see the current state, then run the
+   steps you need one by one. You will be asked before anything is changed.
 
 6. **Reboot** when you are done. Several settings, such as the regulatory domain, kernel
    parameters and the iwd configuration, only take full effect after a reboot.
@@ -86,24 +118,38 @@ start directly with `--lang <code>`.
 ### Main menu
 
 ```
+  ── Diagnostics
    1) System info / diagnostics
+
+  ── Wi-Fi settings (old fixes)
    2) Set Wi-Fi regulatory domain
    3) NetworkManager → iwd backend
    4) Disable Wi-Fi power saving
    5) iwd: roaming threshold & scanning
+   R) Undo Wi-Fi fixes
+
+  ── System & multimedia
    6) Fedora: RPM Fusion / multimedia / Mesa freeworld
    7) Audio: PipeWire-Pulse
-   8) Start Steam with -pipewire-dmabuf
+   M) Undo the Fedora multimedia changes
+
+  ── Steam
+   8) Start Steam with a PipeWire launch option
+   S) Undo the Steam launch option
+
+  ── Network & firewall
    9) Firewall rules (ufw / firewalld)
   10) Frame connection into zone 'trusted'
-  11) Dongle troubleshoot script (from Valve's GitHub repo)
-  12) USB autosuspend off (GRUB kernel parameter)
 
-   A) Run all recommended steps
-   R) Revert iwd backend
+  ── Tools
+  11) Dongle troubleshoot script (from Valve's GitHub repo)
+
    L) Language
    0) Quit
 ```
+
+The headings are group labels only and cannot be selected. They come from the `MENU`
+table in `steam-frame-setup.sh`: a `"#|key|"` row is a heading, `""` is a blank line.
 
 ## Command-line options
 
@@ -132,8 +178,22 @@ interface, firewall, audio server, Steam Frame connection profiles and whether S
 **Why:** If the regulatory domain is `00` (world/minimal), many 5 GHz channels are restricted,
 and the Frame's link suffers.
 
-**What the script does:**
-- Shows the current value (`iw reg get`) and suggests your country from the locale, e.g. `DE`.
+**You choose the country.** The script shows the current value (`iw reg get`) and then
+offers:
+
+| Entry | Meaning |
+|---|---|
+| `DE  (from your system language)` | The country your locale implies, e.g. `de_AT` → `AT`. Only offered when the locale implies one. |
+| `FR  (currently active)` | The domain already in force, if it is set and differs from the first entry. |
+| `Enter a country code` | Type any two-letter ISO code. |
+| `Show all 181 known codes, then enter one` | Prints every code the local regulatory database knows, then asks. |
+
+The entered code is checked against that database — `regdbdump` if installed, otherwise the
+country list in `/etc/conf.d/wireless-regdom`. A code it does not know (a typo such as `GE`
+for `DE`, say) is reported, because the kernel would silently ignore it; you can still
+confirm it.
+
+**What the script then does:**
 - **Arch / CachyOS:** enables your country in `/etc/conf.d/wireless-regdom`
   (package `wireless-regdb`).
 - **Fedora / Debian / Ubuntu / Mint:** writes
@@ -237,11 +297,21 @@ sudo dnf swap -y ffmpeg-free ffmpeg --allowerasing
 sudo dnf group install -y multimedia
 sudo dnf update -y @multimedia --setopt="install_weakdeps=False" --exclude=PackageKit-gstreamer-plugin
 
-# Mesa freeworld (the .i686 variants are only swapped if they are installed)
-sudo dnf swap -y mesa-va-drivers     mesa-va-drivers-freeworld
-sudo dnf swap -y mesa-vdpau-drivers  mesa-vdpau-drivers-freeworld
+# Mesa freeworld – see the note below for which form applies
 sudo dnf swap -y mesa-vulkan-drivers mesa-vulkan-drivers-freeworld
 ```
+
+**The Mesa part adapts to the Fedora release**, because the package layout changed:
+
+| | F42 / F43 | F44 / F45 |
+|---|---|---|
+| `mesa-va-drivers` | real package → `dnf swap` | only a virtual provide of `mesa-dri-drivers` → `dnf install …-freeworld` alongside |
+| `mesa-vdpau-drivers` | real package → `dnf swap` | gone from Fedora entirely → skipped with a note |
+| `mesa-vulkan-drivers` | real package → `dnf swap` | real package → `dnf swap` |
+
+The script decides this per package from what is actually installed and available, so it
+needs no release check. The `.i686` variants are only touched when the 32-bit stock driver
+is already installed; they are never pulled in.
 
 On Atomic Fedora (Silverblue, Kinoite, Bazzite, …) this step stops with a hint instead.
 Bazzite already includes all of this.
@@ -269,20 +339,32 @@ sudo apt install pipewire-pulse        # Debian / Ubuntu / Mint
 systemctl --user enable --now pipewire.socket pipewire-pulse.socket wireplumber.service
 ```
 
-### 8) Start Steam with `-pipewire-dmabuf`
+### 8) Start Steam with a PipeWire launch option
 
 **Why:** Desktop/screen sharing in VR (e.g. in VRChat in PCVR mode) needs Steam to be
-started with `-pipewire-dmabuf`.
+started with a PipeWire capture option.
+
+**You choose which one:**
+
+| Option | When to use it |
+|---|---|
+| `-pipewire-dmabuf` | With DMA-BUF, zero-copy, usually the faster one. Start here. |
+| `-pipewire` | Without DMA-BUF. Try this if the shared screen stays black or glitches. |
 
 **What the script does:** creates or updates a user copy of Steam's desktop entry in
 `~/.local/share/applications/`, and in `~/.config/autostart/` if Steam autostarts, so the
-menu launcher passes the option. Native and Flatpak Steam are both supported. A wrong
-entry without the leading dash (`pipewire-dmabuf`) is corrected.
+menu launcher passes the option. Native and Flatpak Steam are both supported. Only the
+`Exec=` line of the `[Desktop Entry]` section is touched, not the right-click actions.
+Both options are removed before the chosen one is inserted, so you can switch between them
+at any time, and an entry missing the leading dash (`pipewire-dmabuf`) is repaired.
+
+> **The change only takes effect after a restart.** Quit Steam completely (Steam → Exit,
+> and check the tray icon is gone), then start it again from your menu.
 
 **By hand:** quit Steam completely, then start it from a terminal:
 
 ```bash
-steam -pipewire-dmabuf
+steam -pipewire-dmabuf      # or: steam -pipewire
 ```
 
 ### 9) Firewall rules
@@ -335,9 +417,21 @@ sudo nmcli connection up "<frame-profile>"
 ### 11) Valve dongle troubleshoot script
 
 Downloads Valve's official
-[`frame-dongle-troubleshoot.sh`](https://github.com/ValveSoftware/SteamVR-for-Linux/blob/master/frame-dongle-troubleshoot.sh)
+[`frame-dongle-troubleshoot.sh`](https://github.com/ValveSoftware/SteamVR-for-Linux/blob/f4d917f7d8e17ab72a81ab20c9d7d6b2173fab80/frame-dongle-troubleshoot.sh)
 with `wget` from the **raw** GitHub URL into a temporary folder. It offers to show you the
 script first, and runs it only after you confirm.
+
+**The version is pinned.** The URL points at one commit (v0.5) and the download is checked
+against the SHA256 in `steps/11-valve-script.sh`. Everyone therefore runs exactly the
+reviewed version, and the step aborts if the checksum does not match. The flip side: Valve
+revises this script, and newer versions do not reach users until the commit in
+`steam-frame-setup.sh` and that hash are bumped together, after reviewing the new version:
+
+```bash
+wget --https-only -O new.sh https://raw.githubusercontent.com/ValveSoftware/SteamVR-for-Linux/master/frame-dongle-troubleshoot.sh
+less new.sh            # review it
+sha256sum new.sh       # put this hash into steps/11-valve-script.sh
+```
 
 The script is read-only diagnostics: it checks kernel and `rtw89` driver, rfkill, regulatory
 domain, firewall and VPN interfaces, and prints `PROBLEM:` / `INFO:` lines. **It does not
@@ -356,55 +450,64 @@ bash frame-dongle-troubleshoot.sh      # sudo only needed for the ufw check
 > Use the `raw.githubusercontent.com` URL. The normal GitHub link (`…/blob/…`) downloads
 > an HTML page, not the script.
 
-### 12) USB autosuspend off
-
-**Why:** If the kernel suspends the USB dongle to save power, the connection can drop.
-The kernel parameter `usbcore.autosuspend=-1` turns this off.
-
-**What the script does:**
-- **GRUB:** adds the parameter to `GRUB_CMDLINE_LINUX_DEFAULT` in `/etc/default/grub` and
-  regenerates the config:
-  - Debian / Ubuntu / Mint: `update-grub`
-  - Arch / CachyOS: `grub-mkconfig -o /boot/grub/grub.cfg`
-  - Fedora: `grubby --update-kernel=ALL --args=usbcore.autosuspend=-1`
-  - If the parameter is already there, the script offers to remove it again.
-- **Other bootloaders** (Limine – the CachyOS default, systemd-boot, sdboot-manage): shows
-  exactly where to add it by hand.
-- Optionally disables autosuspend right away until the next reboot. This only applies to
-  newly plugged-in devices, so replug the dongle once.
-
-**By hand (GRUB):**
-
-```bash
-sudo nano /etc/default/grub
-# GRUB_CMDLINE_LINUX_DEFAULT="quiet splash usbcore.autosuspend=-1"
-sudo update-grub                                  # Debian / Ubuntu / Mint
-sudo grub-mkconfig -o /boot/grub/grub.cfg         # Arch / CachyOS
-```
-
-**By hand (Limine on CachyOS):** add `usbcore.autosuspend=-1` to the
-`KERNEL_CMDLINE[default]` line in `/etc/default/limine`, then run `sudo limine-update`.
-
-### A) Run all recommended steps
-
-Goes through steps 2–5, 6 (Fedora only), 7–10 and 12 in order and asks before each one.
-If a step fails, the script continues with the next one.
-
 ---
 
 ## Backups and undoing changes
 
 - Before a system file is changed for the first time in a session, it is copied to
-  `<file>.bak-YYYYMMDD-HHMMSS` next to the original.
+  `<file>.bak-YYYYMMDD-HHMMSS` next to the original. An existing backup is never
+  overwritten; if a name is already taken, a counter is appended (`…-192516-1`), so the
+  oldest state always survives.
 - To restore a file, copy the backup back, for example:
 
   ```bash
   sudo cp /etc/iwd/main.conf.bak-20261009-101500 /etc/iwd/main.conf
   ```
 
-- **R) Revert iwd backend** removes `wifi_backend.conf` after making a backup, can disable
-  `iwd.service`, and restarts NetworkManager.
-- Step 12 offers to remove `usbcore.autosuspend=-1` from GRUB again when it is already set.
+- **R) Undo Wi-Fi fixes** undoes steps 2–5 using exactly those backups. It asks per item
+  and, for each file, restores the **oldest** backup — the state before this script first
+  changed it. A file that the script created, and that therefore has no backup, is removed
+  instead. The backups themselves are kept.
+
+  | Item | File |
+  |---|---|
+  | iwd backend | `/etc/NetworkManager/conf.d/wifi_backend.conf`, optionally disables `iwd.service` |
+  | Power saving | `/etc/NetworkManager/conf.d/wifi-powersave-off.conf` |
+  | iwd configuration | `/etc/iwd/main.conf` — holds both the power-save quirk (step 4) and roaming/scanning (step 5), so it is one item |
+  | Regulatory domain | `/etc/modprobe.d/cfg80211-regdom.conf`, `/etc/conf.d/wireless-regdom`, `/etc/default/crda`, whichever exists |
+
+  It offers to restart NetworkManager and iwd afterwards. Regulatory domain and power
+  saving are only re-read after a reboot.
+
+- **S) Undo the Steam launch option** does the same for step 8: it restores the backup of
+  `~/.local/share/applications/steam.desktop` (and the `~/.config/autostart/` copy, if
+  there is one), or removes a copy the script created, so Steam's own launcher applies
+  again. The system-wide entry is never touched.
+
+- **M) Undo the Fedora multimedia changes** has no backups to work from, because step 6
+  changes packages rather than files. It runs the swaps the other way round instead, asking
+  per item and only for packages that are actually installed:
+
+  | Item | Command |
+  |---|---|
+  | Mesa drivers | `dnf swap mesa-*-freeworld mesa-*` for each of va/vdpau/vulkan, plus the `.i686` variants |
+  | ffmpeg | `dnf swap ffmpeg ffmpeg-free --allowerasing` |
+  | RPM Fusion | `dnf remove rpmfusion-free-release rpmfusion-nonfree-release`, after a second confirmation |
+
+  The `multimedia` group is deliberately left alone: removing it would also take out codecs
+  the desktop needs. Packages already installed from RPM Fusion stay installed and simply
+  stop receiving updates, which the step says before removing the repositories.
+
+  Mesa is undone the same way round as it was applied: swapped back where the stock package
+  really exists, and simply removed where it does not, because from Fedora 44 on the stock
+  VA support is part of `mesa-dri-drivers` and returns on its own.
+
+  **Tested in containers on Fedora 42, 43, 44 and 45** with real `dnf` transactions: apply
+  step 6, run the revert, and the Mesa and ffmpeg packages are back to their starting
+  versions on every release. The full step 6 including the `multimedia` group was run end
+  to end on Fedora 44. It has not been tested on a running desktop, though, so on Fedora
+  please still try it in a virtual machine first — a Mesa swap that goes wrong can leave
+  you without a graphical session.
 
 ---
 
@@ -418,7 +521,8 @@ lib/
   system.sh               distro / package / network / bootloader detection
   i18n.sh                 loads lang/*.lang, language detection
 steps/
-  01-diagnose.sh … 12-usb-autosuspend.sh, 99-all.sh   one file per menu entry
+  01-diagnose.sh … 11-valve-script.sh                 one file per menu entry
+  90-wifi-revert.sh                                   undo steps 2–5 from the backups
 lang/
   en.lang de.lang es.lang fr.lang pt.lang zh.lang ja.lang
 ```
@@ -466,7 +570,6 @@ Further reading:
 - [RPM Fusion](https://rpmfusion.org/)
 - [ArchWiki – NetworkManager: using iwd as the Wi-Fi backend](https://wiki.archlinux.org/title/NetworkManager#Using_iwd_as_the_Wi-Fi_backend)
 - [ArchWiki – iwd](https://wiki.archlinux.org/title/Iwd)
-- [Linux kernel docs – USB power management](https://www.kernel.org/doc/html/latest/driver-api/usb/power-management.html)
 
 ---
 

@@ -1,8 +1,17 @@
 # shellcheck shell=bash
-# Steam with -pipewire-dmabuf (tested by Nhitho)
+# Steam with a PipeWire launch option (tested by Nhitho)
 
 step_steam_dmabuf() {
     title "$(t t_steam)"
+
+    # The user picks the launch option; both are stripped before the chosen one
+    # is inserted, so switching between them works too.
+    local param
+    choose "$(t which_param)" \
+        "-pipewire-dmabuf  ($(t steam_opt_dmabuf))" \
+        "-pipewire  ($(t steam_opt_plain))" || return 0
+    param=${REPLY_CHOICE%% *}
+
     local -a sources=(
         /usr/share/applications/steam.desktop
         /var/lib/flatpak/exports/share/applications/com.valvesoftware.Steam.desktop
@@ -14,7 +23,7 @@ step_steam_dmabuf() {
 
     if (( ${#found[@]} == 0 )); then
         warn "$(t steam_none)"
-        echo "    steam -pipewire-dmabuf"
+        echo "    steam $param"
         return 0
     fi
     choose "$(t which_steam)" "${found[@]}" || return 0
@@ -27,17 +36,18 @@ step_steam_dmabuf() {
     for target in "${targets[@]}"; do
         # Reuse an existing user copy, otherwise copy the system file
         if [[ -e $target ]]; then base=$target; else base=$src; fi
-        if grep -qE '^Exec=.* -pipewire-dmabuf( |$)' "$base"; then
-            ok "$(t dmabuf_present "$target")"
+        if grep -qE "^Exec=.* $param( |\$)" "$base"; then
+            ok "$(t dmabuf_present "$target" "$param")"
             continue
         fi
         tmp=$(mktemp)
-        awk '
+        awk -v p="$param" '
             /^\[/ { main = ($0 == "[Desktop Entry]") }
             main && /^Exec=/ {
-                gsub(/ -?pipewire-dmabuf/, "")   # drop old/broken entries (missing "-")
-                if (!sub(/com\.valvesoftware\.Steam/, "& -pipewire-dmabuf"))
-                    sub(/^Exec=[^ ]+/, "& -pipewire-dmabuf")
+                gsub(/ -?pipewire-dmabuf/, "")   # drop the other option and
+                gsub(/ -?pipewire/, "")          # old entries missing the "-"
+                if (!sub(/com\.valvesoftware\.Steam/, "& " p))
+                    sub(/^Exec=[^ ]+/, "& " p)
             }
             { print }' "$base" > "$tmp"
         info "$(t change_for "$target")"
@@ -52,5 +62,5 @@ step_steam_dmabuf() {
         rm -f "$tmp"
     done
     command -v update-desktop-database >/dev/null && run update-desktop-database "$HOME/.local/share/applications" 2>/dev/null
-    info "$(t steam_restart)"
+    warn "$(t steam_restart "$param")"
 }

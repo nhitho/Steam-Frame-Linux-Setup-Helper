@@ -3,7 +3,7 @@
 #  Steam Frame – Linux Setup Helper
 #
 #  Interactive script that applies the known tweaks for the Steam Frame
-#  (Wi-Fi dongle, iwd, firewall, audio, Steam launch option, USB).
+#  (Wi-Fi dongle, iwd, firewall, audio, Steam launch option).
 #
 #  Distributions: Arch Linux, CachyOS (and other Arch derivatives),
 #                 Fedora, Debian, Ubuntu, Linux Mint (and other Debian derivatives)
@@ -26,14 +26,15 @@ PATH="$PATH:/usr/sbin:/sbin"
 
 SCRIPT_DIR=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
 
-VALVE_SCRIPT_URL="https://raw.githubusercontent.com/ValveSoftware/SteamVR-for-Linux/master/frame-dongle-troubleshoot.sh"
-VALVE_SCRIPT_PAGE="https://github.com/ValveSoftware/SteamVR-for-Linux/blob/master/frame-dongle-troubleshoot.sh"
+VALVE_SCRIPT_URL="https://raw.githubusercontent.com/ValveSoftware/SteamVR-for-Linux/f4d917f7d8e17ab72a81ab20c9d7d6b2173fab80/frame-dongle-troubleshoot.sh"
+VALVE_SCRIPT_PAGE="https://github.com/ValveSoftware/SteamVR-for-Linux/blob/f4d917f7d8e17ab72a81ab20c9d7d6b2173fab80/frame-dongle-troubleshoot.sh"
 
 NM_BACKEND_CONF="/etc/NetworkManager/conf.d/wifi_backend.conf"
 NM_POWERSAVE_CONF="/etc/NetworkManager/conf.d/wifi-powersave-off.conf"
 IWD_MAIN_CONF="/etc/iwd/main.conf"
 ARCH_REGDOM_CONF="/etc/conf.d/wireless-regdom"
 MODPROBE_REGDOM_CONF="/etc/modprobe.d/cfg80211-regdom.conf"
+CRDA_CONF="/etc/default/crda"
 
 DRY_RUN=0
 
@@ -47,23 +48,36 @@ for _f in "$SCRIPT_DIR"/lib/*.sh "$SCRIPT_DIR"/steps/*.sh; do
 done
 unset _f
 
-# Menu entries: key|text key|function  (empty entry = blank line)
+# Menu entries: key|text key|function
+#   ""        blank line
+#   "#|key|"  group heading, not selectable
 MENU=(
+    "#|g_diag|"
     "1|m1|step_diagnose"
+    ""
+    "#|g_wifi|"
     "2|m2|step_regdom"
     "3|m3|step_iwd_backend"
     "4|m4|step_powersave"
     "5|m5|step_iwd_tuning"
+    "r|mR|step_wifi_revert"
+    ""
+    "#|g_system|"
     "6|m6|step_fedora_multimedia"
     "7|m7|step_audio"
+    "m|mM|step_fedora_revert"
+    ""
+    "#|g_steam|"
     "8|m8|step_steam_dmabuf"
+    "s|mS|step_steam_revert"
+    ""
+    "#|g_network|"
     "9|m9|step_firewall"
     "10|m10|step_trusted_zone"
-    "11|m11|step_valve_script"
-    "12|m12|step_usb_autosuspend"
     ""
-    "a|mA|step_all"
-    "r|mR|step_iwd_backend_revert"
+    "#|g_tools|"
+    "11|m11|step_valve_script"
+    ""
     "l|mL|choose_language"
     "0|m0|"
 )
@@ -86,6 +100,10 @@ menu() {
         for entry in "${MENU[@]}"; do
             [[ -z $entry ]] && { echo; continue; }
             IFS='|' read -r key label fn <<< "$entry"
+            if [[ $key == '#' ]]; then
+                printf '  %s%s %s%s\n' "$C_BOLD" "$(t g_prefix)" "$(t "$label")" "$C_RESET"
+                continue
+            fi
             printf '  %2s) %s\n' "${key^^}" "$(t "$label")"
         done
         echo
@@ -96,7 +114,7 @@ menu() {
         found=0
         for entry in "${MENU[@]}"; do
             IFS='|' read -r key label fn <<< "$entry"
-            [[ -n $entry && $key == "$choice" ]] && { found=1; break; }
+            [[ -n $entry && $key != '#' && $key == "$choice" ]] && { found=1; break; }
         done
         if (( ! found )); then
             warn "$(t invalid)"

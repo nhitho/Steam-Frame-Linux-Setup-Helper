@@ -58,11 +58,11 @@ detect_lang() {
     if lang_supported "$l"; then echo "$l"; else echo en; fi
 }
 
-# Country code suggested for the regulatory domain (de_AT.UTF-8 → AT)
+# Country code the locale implies (de_AT.UTF-8 → AT), empty if it implies none
 locale_country() {
     local l=${LC_ALL:-${LANG:-}} cc
     cc=${l#*_}; cc=${cc%%[.@]*}
-    if [[ $l == *_* && $cc =~ ^[A-Za-z]{2}$ ]]; then echo "${cc^^}"; else echo DE; fi
+    [[ $l == *_* && $cc =~ ^[A-Za-z]{2}$ ]] && echo "${cc^^}"
 }
 
 choose_language() {
