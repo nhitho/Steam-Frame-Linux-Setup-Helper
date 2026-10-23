@@ -83,6 +83,13 @@ available_regdoms() {
     } | grep -vx 00 | sort -u
 }
 
+# Is the running kernel at least $1 (e.g. "7.2")?
+kernel_at_least() {
+    local want=$1 have
+    have=$(uname -r); have=${have%%-*}
+    [[ $(printf '%s\n%s\n' "$want" "$have" | sort -V | head -1) == "$want" ]]
+}
+
 # Is a package with exactly this name available in the enabled repos?
 # A name that only exists as a virtual provide — mesa-va-drivers is one of
 # mesa-dri-drivers from Fedora 44 on — gives false, which is what the Mesa

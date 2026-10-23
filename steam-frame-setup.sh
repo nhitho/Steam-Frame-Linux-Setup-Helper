@@ -36,6 +36,10 @@ ARCH_REGDOM_CONF="/etc/conf.d/wireless-regdom"
 MODPROBE_REGDOM_CONF="/etc/modprobe.d/cfg80211-regdom.conf"
 CRDA_CONF="/etc/default/crda"
 
+# Kernel from which the Wi-Fi fixes in steps 2-5 are usually no longer needed.
+# Only this one place holds the number; the note texts take it as a placeholder.
+WIFI_FIX_KERNEL="7.2.9"
+
 DRY_RUN=0
 
 if [[ ! -d $SCRIPT_DIR/lib || ! -d $SCRIPT_DIR/steps || ! -f $SCRIPT_DIR/lang/en.lang ]]; then
@@ -51,11 +55,13 @@ unset _f
 # Menu entries: key|text key|function
 #   ""        blank line
 #   "#|key|"  group heading, not selectable
+#   "*||fn"   note line, rendered by fn, not selectable
 MENU=(
     "#|g_diag|"
     "1|m1|step_diagnose"
     ""
     "#|g_wifi|"
+    "*||wifi_legacy_note"
     "2|m2|step_regdom"
     "3|m3|step_iwd_backend"
     "4|m4|step_powersave"
@@ -82,6 +88,20 @@ MENU=(
     "0|m0|"
 )
 
+# Note under the Wi-Fi group. These steps come from the early days of the
+# dongle; whether they still matter depends on how old the kernel is, so say
+# which case the machine is in instead of claiming one for everyone.
+wifi_legacy_note() {
+    local k key line
+    k=$(uname -r); k=${k%%-*}
+    if kernel_at_least "$WIFI_FIX_KERNEL"; then key=g_wifi_note_new; else key=g_wifi_note_old; fi
+    # Three short lines instead of one long one, so nothing wraps at 80 columns
+    printf '      %s%s%s\n' "$C_DIM" "$(t g_wifi_note_try)" "$C_RESET"
+    line=$(t "$key" "$k")
+    printf '      %s%s%s\n' "$C_DIM" "${line//\{min\}/$WIFI_FIX_KERNEL}" "$C_RESET"
+    printf '      %s%s%s\n' "$C_DIM" "$(t g_wifi_note_beta)" "$C_RESET"
+}
+
 menu_header() {
     local text line
     text="  $(t menu_title)  "
@@ -104,6 +124,7 @@ menu() {
                 printf '  %s%s %s%s\n' "$C_BOLD" "$(t g_prefix)" "$(t "$label")" "$C_RESET"
                 continue
             fi
+            [[ $key == '*' ]] && { "$fn"; continue; }
             printf '  %2s) %s\n' "${key^^}" "$(t "$label")"
         done
         echo
@@ -114,7 +135,7 @@ menu() {
         found=0
         for entry in "${MENU[@]}"; do
             IFS='|' read -r key label fn <<< "$entry"
-            [[ -n $entry && $key != '#' && $key == "$choice" ]] && { found=1; break; }
+            [[ -n $entry && $key != '#' && $key != '*' && $key == "$choice" ]] && { found=1; break; }
         done
         if (( ! found )); then
             warn "$(t invalid)"

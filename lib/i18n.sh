@@ -19,6 +19,9 @@ mapfile -t SUPPORTED_LANGS < <(
 unset _f
 
 # Get a translated text: t KEY [printf arguments …]
+# Values use %s for arguments. Where a language needs a value in a position of
+# its own choosing, the text carries a named token instead, like {min}, which
+# the caller substitutes — bash's printf has no positional %1$s arguments.
 t() {
     local key=$1; shift
     # shellcheck disable=SC2059

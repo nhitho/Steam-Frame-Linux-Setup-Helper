@@ -53,6 +53,7 @@ only condition.
 - [Quick start](#quick-start)
 - [Command-line options](#command-line-options)
 - [The steps in detail](#the-steps-in-detail)
+  - [Steps 2–5: the old Wi-Fi fixes](#steps-25-the-old-wi-fi-fixes)
 - [Backups and undoing changes](#backups-and-undoing-changes)
 - [Project layout](#project-layout)
 - [Adding a language](#adding-a-language)
@@ -122,6 +123,9 @@ start directly with `--lang <code>`.
    1) System info / diagnostics
 
   ── Wi-Fi settings (old fixes)
+      From the early days – try a session without these first.
+      Kernel 7.3.0 already ships the new rtw89 (7.2.9 or newer).
+      Clearly better with SteamVR 2.18 beta, SteamOS 0.5.6 beta, client beta.
    2) Set Wi-Fi regulatory domain
    3) NetworkManager → iwd backend
    4) Disable Wi-Fi power saving
@@ -172,6 +176,69 @@ Read-only. Shows distribution, kernel, bootloader, USB autosuspend value, Wi-Fi 
 domain, NetworkManager backend, iwd status and configuration, power-save state per Wi-Fi
 interface, firewall, audio server, Steam Frame connection profiles and whether Steam has the
 `-pipewire-dmabuf` option. Run this first and again after making changes.
+
+### Steps 2–5: the old Wi-Fi fixes
+
+These four grew up with the dongle, when the `rtw89` USB driver was new, had to be built by
+hand on many distributions, and Steam's own handling of the link was rougher than it is
+today. **On a current system they are often unnecessary.** The menu prints a three-line note
+under the group heading, where the middle line depends on the running kernel:
+
+```
+  ── Wi-Fi settings (old fixes)
+      From the early days – try a session without these first.
+      Kernel 7.3.0 already ships the new rtw89 (7.2.9 or newer).   ← 7.2.9 or newer
+      Clearly better with SteamVR 2.18 beta, SteamOS 0.5.6 beta, client beta.
+```
+```
+      Meant for kernels before 7.2.9; kernel 6.11.0 is one of them.   ← older kernel
+```
+
+**Two kernel numbers appear here and they mean different things.** `7.2` is where the
+`rtw89` driver for the dongle became available by default — that is the threshold Valve's
+own troubleshoot script checks, and below it the dongle may not come up at all. `7.2.9` is
+the version from which these fixes stopped being necessary in practice on the maintainer's
+machines, which is the question this note answers, so that is what it compares against.
+
+The number lives in exactly one place, `WIFI_FIX_KERNEL` in `steam-frame-setup.sh`. The note
+texts in `lang/*.lang` carry it as a `{min}` token rather than spelling it out, so changing
+it once updates all seven languages. Comparison is by version, not by string: a two-digit
+component sorts by its value, the way 6.10 came after 6.9 and not before it.
+
+#### What changed since then
+
+The kernel is only half of it. The other half is the software on both ends, and the
+improvements arrived **in the beta channels first**:
+
+| Where | Version that brought it | What it affects |
+|---|---|---|
+| Steam client | **beta** (`publicbeta`) | How the client sets up and holds the dongle link, and the `frame_…` connection profile it writes |
+| SteamVR | **2.18 beta** | `vrlink`, the streaming transport — it now keeps several links open at once and picks the best one, instead of relying on the one interface being well behaved |
+| Frame system | **SteamOS 0.5.6 beta** | The other end of that same link, on the headset itself |
+
+Much of what steps 3 and 5 force by hand — do not roam away mid-stream, do not scan during a
+session — is handled by those versions on their own.
+
+**That is also why the steps are still shipped.** If you are on stable Steam and stable
+SteamVR, you do not have those improvements yet, and the old fixes may well be what makes
+your sessions hold.
+
+#### The maintainer's experience
+
+Up to kernel **7.2.9** the fixes in this group were still needed here to get a stable link.
+With kernel **7.3.0**, the current `rtw89_8852cu` driver and **SteamVR 2.18 beta + SteamOS
+0.5.6 beta + the Steam client beta**, a session
+measured on this machine ran for **46 minutes** over the dongle with **none** of steps 3–5
+applied — only the regulatory domain from step 2 — and showed no roaming, no scan
+interruption, no reconnect and no dropped frames. iwd was not installed at all.
+
+That is one machine on beta software, not a guarantee. Different hardware, a busier 6 GHz
+neighbourhood or a stable Steam channel can all put you back in the case the steps were
+written for, which is why they remain here.
+
+**So the order to try things in is:** plug the dongle in, start a session, and only come
+back here if it actually misbehaves. Point **1** tells you what is set, and **R** takes all
+four back off again.
 
 ### 2) Set Wi-Fi regulatory domain
 
